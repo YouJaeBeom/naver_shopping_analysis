@@ -47,3 +47,6 @@ def click_volume(keyword, Authorization):
     monthlyAveMobileClkCnt =  response_json['keywordList'][0]['monthlyAveMobileClkCnt']
 
     return monthlyAvePcClkCnt, monthlyAveMobileClkCnt
+
+if __name__ == "__main__" :
+    pass
