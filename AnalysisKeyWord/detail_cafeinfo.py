@@ -2,9 +2,13 @@ import re
 import requests
 from bs4 import BeautifulSoup as bs
 import json
+import datetime
 
 def getcafeid(url):
     response = requests.get(url)
+    """with open("TextFile.txt", "w") as file:
+        file.write(response.text)"""
+    #print(response.text)
     cafeid = re.findall(r'g_sClubId = .*;', response.text)
     cafeid = cafeid[0].replace('g_sClubId = ', '').replace('"','').replace(';','').strip()
 
@@ -19,9 +23,6 @@ def getcafeinfo(url):
 
     pageid = re.findall(r'/.*\?', url)
     pageid = pageid[0].replace('?','').split("/")[4]
-    
-
-    #print(cafeid, art, pageid)
      
 
     cookies = {
@@ -64,8 +65,13 @@ def getcafeinfo(url):
     response = requests.get('https://apis.naver.com/cafe-web/cafe-articleapi/v2/cafes/'+cafeid+'/articles/'+pageid+'/comments/pages/1', params=params, cookies=cookies, headers=headers)
     response_json = json.loads(response.text)
     readCount = response_json['result']['article']['readCount']
+    writeDate = response_json['result']['article']['writeDate']
+    writeDate = datetime.datetime.fromtimestamp(writeDate/1000.0)
 
-    return readCount
+
+    return readCount, writeDate
 
 if __name__ == "__main__":
-    getcafeinfo("https://cafe.naver.com/yeosumam/1403925?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6Inllb3N1bWFtIiwiYXJ0aWNsZUlkIjoxNDAzOTI1LCJpc3N1ZWRBdCI6MTY1NTQ2MTYyNjg4NX0.S2v49rZOcLaUV4Kc_fpGmCM5Qckn7dYdCI-T-WfryEo")
+    getcafeinfo("https://cafe.naver.com/imsanbu/61325641?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6Imltc2FuYnUiLCJhcnRpY2xlSWQiOjYxMzI1NjQxLCJpc3N1ZWRBdCI6MTY1NTUzNDQ3MzEzMH0.2BBMBQJuIIb8AkXd8iRCSLZASgvG1pcLt88DbP2AC7E")
+    
+    #ex()

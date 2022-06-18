@@ -3,10 +3,11 @@ import requests
 from bs4 import BeautifulSoup as bs
 import json
 import detail_cafeinfo
+import detail_bloginfo
+import detail_postinfo
 
 def content_exposure_ranking(keyword):
-    total_results =[] 
-    total_url = []
+    total_results = []
     start = 0
     while (True):
         cookies = {
@@ -74,26 +75,41 @@ def content_exposure_ranking(keyword):
         response_json = response_json['html']
         soup = bs(response_json, "html.parser")
 
-        results = soup.find_all('a', class_='api_txt_lines')
+        results = soup.find_all("div", class_="total_area")
+        #sub_txt sub_name 
 
-        results_url = soup.find_all('a', class_='api_txt_lines total_tit')
         for idx, result in enumerate(results):
-            total_url.append(result.get('href'))
-            print("start point : ",start ,"index : ",idx, "result : ",  result.get('href'))
-            if  "cafe" in str(result.get('href')):
-                try : 
-                    readCount = detail_cafeinfo.getcafeinfo(result.get('href'))
-                    print("cafe 조회수는 ", readCount)
-                except:
-                    pass
+            title = result.find('a', class_='api_txt_lines')
+            publish_title = result.find('a', class_='sub_txt sub_name')
 
-        ## 상세 url a > api_txt_lines total_tit
-        
+            ## adc일 경우
+            if publish_title is None:
+                publish_title = result.find('span', class_='source_txt name')
+            
+            readCount = ""
+            writeDate = ""
+
+            if  "cafe" in str( (requests.get(title.get('href'))).url ):
+                readCount, writeDate = detail_cafeinfo.getcafeinfo(title.get('href'))
+            elif  "blog" in str( (requests.get(title.get('href'))).url ):
+                readCount = None
+                writeDate = result.find("span", class_="sub_time sub_txt").text
+            elif  "post" in str( (requests.get(title.get('href'))).url ):
+                readCount = None
+                writeDate = detail_postinfo.getpostinfo(title.get('href'))
+            
+            print("start point : ",start ,"index : ",idx,  "readCount : ", readCount, "writeDate : ", writeDate , "result : ",  title.text, "publish_title : ", publish_title.text)
+
+            title = title.text
+            publish_title = publish_title.text
+            readCount = readCount
+            writeDate = writeDate
+            total_result = [title, publish_title, readCount, writeDate]
+            total_results.append(total_result)
+
         if len(results)==0:
             break
-        for idx, result in enumerate(results):
-            total_results.append(result.text)
-            print("start point : ",start ,"index : ",idx, "result : ",  result.text)
+            
         
         start = start+len(results)+1
 
@@ -103,6 +119,7 @@ def content_exposure_ranking(keyword):
     
 
 if __name__ == "__main__":
-    keyword = "마스크"
+    keyword = "아디다스"
     results = content_exposure_ranking(keyword)
+    print(results)
     #cafeid()
