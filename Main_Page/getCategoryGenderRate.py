@@ -1,6 +1,6 @@
 import requests
 import json
-def getdevicerate():
+def getgenderrate(cid, start, end):
     cookies = {
         'NNB': 'DULXWITNGSGGE',
         'nx_ssl': '2',
@@ -27,18 +27,18 @@ def getdevicerate():
     }
 
     data = {
-        'cid': '50000000', ## category unique id 
+        'cid': cid, ## category unique id 
         'timeUnit': 'date',
-        'startDate': '2022-05-06',
-        'endDate': '2022-06-06',
+        'startDate': start,
+        'endDate': end,
         'age': '',
         'gender': '',
         'device': '',
     }
 
-    response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryDeviceRate.naver', cookies=cookies, headers=headers, data=data)
+    response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryGenderRate.naver', cookies=cookies, headers=headers, data=data)
 
     response_json = json.loads(response.text)
     data =  response_json['result'][0]['data']
-    
+
     return data
