@@ -5,14 +5,11 @@ from bs4 import BeautifulSoup as bs
 def getrelated_tag(mallProductId): 
     response = requests.get('https://smartstore.naver.com/main/products/'+mallProductId)
     soup = bs(response.text, "html.parser")
-    with open("text.txt","w")as file:
-        file.write(str(soup))
-    print(soup)
+    
     # _2RkVi-H2ze N=a:itm.tag
     # _2RkVi-H2ze N=a:itm.tag
     related_tags = soup.find_all("a",class_='_3SMi-TrYq2')
-    for related_tag in related_tags:
-        print(related_tag.text)
+
     return related_tags
 
 def getQnA(mallProductId):

@@ -3,6 +3,7 @@ import requests
 import json
 import detail_information_analysis
 from bs4 import BeautifulSoup as bs
+from datetime import datetime
 
 def ranking_analysis_PC(keyword):
     for pagingIndex in range(1,51):
@@ -55,8 +56,11 @@ def ranking_analysis_PC(keyword):
                 store_keepCnt, qnaCnt, related_tag= detail_information_analysis.getinfo(mallProductId)
             else :
                 store_keepCnt, qnaCnt, related_tag = None, None, None
-            print( "{} rank = {} productName = {} price= {} reviewCount= {} purchaseCnt= {} keepCnt= {} store_keepCnt= {} score= {} qnaCnt= {} ".format(mallProductId, rank, productName, price, reviewCount, purchaseCnt, keepCnt, store_keepCnt, score, qnaCnt))
-            print("related_tag : ",related_tag)
+            print( "{} rank = {} productName = {} price= {} reviewCount= {} purchaseCnt= {} keepCnt= {} store_keepCnt= {} score= {} qnaCnt= {} ".format(pagingIndex, rank, productName, price, reviewCount, purchaseCnt, keepCnt, store_keepCnt, score, qnaCnt))
+            #print("related_tag : ",related_tag)
 
 if __name__ == "__main__":
-    print(ranking_analysis_PC("마스크"))
+    starttime = datetime.now()
+    (ranking_analysis_PC("마스크"))
+    endtime = datetime.now()
+    print("time : ", endtime-starttime)

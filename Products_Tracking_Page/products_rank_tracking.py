@@ -1,3 +1,4 @@
+from datetime import datetime
 import requests
 import json
 import detail_information_tracking
@@ -37,7 +38,7 @@ def ranking_tracking_PC(keyword):
             else :
                 store_keepCnt, qnaCnt = None, None
 
-            print( "{} rank = {} productName = {} price= {} reviewCount= {} purchaseCnt= {} keepCnt= {} store_keepCnt= {} score= {} qnaCnt= {} ".format(mallProductId, rank, productName, price, reviewCount, purchaseCnt, keepCnt, store_keepCnt, score, qnaCnt))
+            print( "{} rank = {} productName = {} price= {} reviewCount= {} purchaseCnt= {} keepCnt= {} store_keepCnt= {} score= {} qnaCnt= {} ".format(pagingIndex, rank, productName, price, reviewCount, purchaseCnt, keepCnt, store_keepCnt, score, qnaCnt))
 
 def ranking_tracking_MOB(keyword):
     for pagingIndex in range(1,51):
@@ -79,4 +80,7 @@ def ranking_tracking_MOB(keyword):
             print( "{} rank = {} productName = {} price= {} reviewCount= {} purchaseCnt= {} keepCnt= {} store_keepCnt= {} score= {} qnaCnt= {} ".format(mallProductId, rank, productName, price, reviewCount, purchaseCnt, keepCnt, store_keepCnt, score, qnaCnt))
 
 if __name__ == "__main__":
-    print(ranking_tracking_PC("마스크"))
+    starttime = datetime.now()
+    (ranking_tracking_PC("마스크"))
+    endtime = datetime.now()
+    print("time : ", endtime-starttime)
