@@ -2,7 +2,7 @@ import json
 import requests
 import datetime
 import time
-def getkeywordrand(cid, start, end):
+def getkeywordrand(cid, start, end, device, gender, age):
     ranks_list = []
     for page in range(1,26):
         time.sleep(0.1)
@@ -16,9 +16,9 @@ def getkeywordrand(cid, start, end):
             'timeUnit': 'date',
             'startDate': start,
             'endDate': end,
-            'age': '',
-            'gender': '',
-            'device': '',
+            'age': age,
+            'gender': gender,
+            'device': device,
             'page': str(page),
             'count': '50',
         }
@@ -40,5 +40,15 @@ if __name__ == "__main__":
 
     ## 카테고리 id 설정
     cid = "50000006"
-    ranks_list = getkeywordrand(cid, start, end)
+
+    ## device 별
+    device = "ALL"
+
+    ## Gener 
+    gender = "ALL" 
+
+    ## 나이별
+    age = "20,30,40"
+
+    ranks_list = getkeywordrand(cid, start, end, device, gender, age)
     print("ranks_list : ", ranks_list)

@@ -1,6 +1,6 @@
 import requests
 import json
-def getagerate(cid, start, end):
+def getagerate(cid, start, end, device, gender, age):
     
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:100.0) Gecko/20100101 Firefox/100.0',
@@ -12,9 +12,9 @@ def getagerate(cid, start, end):
         'timeUnit': 'date',
         'startDate': start,
         'endDate': end,
-        'age': '',
-        'gender': '',
-        'device': '',
+        'age': age,
+        'gender': gender,
+        'device': device,
     }
 
     response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryAgeRate.naver',  headers=headers, data=data)
@@ -33,7 +33,15 @@ if __name__ == "__main__":
 
     ## 카테고리 id 설정
     cid = "50000000"
-    ## 나이별
+    
+    ## device 별
+    device = "ALL"
 
-    agerate = getagerate(cid, start, end)
+    ## Gener 
+    gender = "ALL" 
+
+    ## 나이별
+    age = "20,30,40"
+
+    agerate = getagerate(cid, start, end, device, gender, age)
     print("getCategoryAgeRate :", (agerate))

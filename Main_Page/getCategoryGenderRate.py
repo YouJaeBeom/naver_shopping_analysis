@@ -1,6 +1,6 @@
 import requests
 import json
-def getgenderrate(cid, start, end):
+def getgenderrate(cid, start, end, device, gender, age):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:100.0) Gecko/20100101 Firefox/100.0',
         'Referer': 'https://datalab.naver.com/shoppingInsight/sCategory.naver',
@@ -11,9 +11,9 @@ def getgenderrate(cid, start, end):
         'timeUnit': 'date',
         'startDate': start,
         'endDate': end,
-        'age': '',
-        'gender': '',
-        'device': '',
+        'age': age,
+        'gender': gender,
+        'device': device,
     }
 
     response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryGenderRate.naver', headers=headers, data=data)
@@ -32,7 +32,15 @@ if __name__ == "__main__":
 
     ## 카테고리 id 설정
     cid = "50000000"
-    ## 나이별
+    
+    ## device 별
+    device = "ALL"
 
-    agerate = getgenderrate(cid, start, end)
+    ## Gener 
+    gender = "ALL" 
+
+    ## 나이별
+    age = "20,30,40"
+
+    agerate = getgenderrate(cid, start, end, device, gender, age)
     print("getdevicerate :", (agerate))
