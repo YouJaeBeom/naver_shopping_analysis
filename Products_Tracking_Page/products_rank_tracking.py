@@ -10,7 +10,8 @@ def ranking_tracking_PC(keyword):
             'pagingIndex': str(pagingIndex),
             'pagingSize': '80',
             'viewType': 'list',
-            'productSet': 'total',
+            'productSet': 'checkout',
+            'frm': 'NVSHCHK',
             'query': keyword,
             'origQuery': keyword,
         }
@@ -28,15 +29,12 @@ def ranking_tracking_PC(keyword):
             reviewCount = data['reviewCount']
             purchaseCnt = data['purchaseCnt']
             keepCnt = data['keepCnt']
-            
+            score = data['scoreInfo']
+
             mallProductId = data['mallProductId']
             if mallProductId != "":
-                store_keepCnt, score, qnaCnt = detail_information_tracking.getinfo(mallProductId)
+                store_keepCnt, qnaCnt = detail_information_tracking.getinfo(mallProductId)
             else :
-                crUrl = data['crUrl']
-                response = requests.get(crUrl)
-                soup = bs(response.text, "html.parser")
-                score = soup.find("div",class_ ="top_grade__3jjdl").text
                 store_keepCnt, qnaCnt = None, None
 
             print( "{} rank = {} productName = {} price= {} reviewCount= {} purchaseCnt= {} keepCnt= {} store_keepCnt= {} score= {} qnaCnt= {} ".format(mallProductId, rank, productName, price, reviewCount, purchaseCnt, keepCnt, store_keepCnt, score, qnaCnt))
@@ -71,15 +69,12 @@ def ranking_tracking_MOB(keyword):
             reviewCount = data['reviewCount']
             purchaseCnt = data['purchaseCnt']
             keepCnt = data['keepCnt']
+            score = data['scoreInfo']
             
             mallProductId = data['mallProductId']
             if mallProductId != "":
-                store_keepCnt, score, qnaCnt = detail_information_tracking.getinfo(mallProductId)
+                store_keepCnt, qnaCnt = detail_information_tracking.getinfo(mallProductId)
             else :
-                crUrl = data['crUrl']
-                response = requests.get(crUrl)
-                soup = bs(response.text, "html.parser")
-                score = soup.find("div",class_ ="statistics_value__3fze9").text
                 store_keepCnt, qnaCnt = None, None
             print( "{} rank = {} productName = {} price= {} reviewCount= {} purchaseCnt= {} keepCnt= {} store_keepCnt= {} score= {} qnaCnt= {} ".format(mallProductId, rank, productName, price, reviewCount, purchaseCnt, keepCnt, store_keepCnt, score, qnaCnt))
 

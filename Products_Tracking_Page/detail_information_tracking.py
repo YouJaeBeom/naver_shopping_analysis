@@ -19,18 +19,14 @@ def getinfo(mallProductId):
     except Exception as e:
         print(e)
         store_keepCnt = None
-    try:
-        score = soup.find_all("strong",class_='_2pgHN-ntx6')[1].text
-    except Exception as e:
-        print(e)
-        score = None
+
     try:
         qnaCnt = getQnA(mallProductId)
     except Exception as e:
         print(e)
         qnaCnt = None
 
-    return store_keepCnt, score, qnaCnt
+    return store_keepCnt, qnaCnt
 
 if __name__ == "__main__":
     print(getQnA("6176787621"))
