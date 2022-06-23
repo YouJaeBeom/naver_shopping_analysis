@@ -1,14 +1,14 @@
 import requests
 import json
 
-def most_purchase_products_7d():
+def most_purchase_products(cid,period):
     params = {
-        'categoryCategoryId': 'ALL',
+        'categoryCategoryId': cid,
         'categoryChildCategoryId': '',
         'categoryDemo': 'M04',
         'categoryMidCategoryId': '',
-        'categoryRootCategoryId': 'ALL',
-        'period': 'P7D',
+        'categoryRootCategoryId': cid,
+        'period': period,
     }
 
     response = requests.get('https://search.shopping.naver.com/best/_next/data/NurwgmMcJVwLajFklX6sM/category/purchase.json', params=params)
@@ -18,4 +18,9 @@ def most_purchase_products_7d():
     return products
 
 if __name__ == "__main__":
-    print(most_purchase_products_7d())
+    # cid -> ALL or 5000000 etc..
+    cid = "ALL"
+
+    # period -> P1D or P7D
+    period = "P7D"
+    print(most_purchase_products(cid,period))

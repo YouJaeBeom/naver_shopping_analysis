@@ -2,15 +2,15 @@
 import json
 import requests
 
-def most_trend_keywords_1d():
+def most_trend_keywords(cid,period):
     params = {
-        'categoryCategoryId': 'ALL',
+        'categoryCategoryId': cid,
         'categoryChildCategoryId': '',
         'categoryDemo': 'M04',
         'categoryMidCategoryId': '',
-        'categoryRootCategoryId': 'ALL',
+        'categoryRootCategoryId': cid,
         'chartRank': '1',
-        'period': 'P1D',
+        'period': period,
     }
 
     response = requests.get('https://search.shopping.naver.com/best/_next/data/NurwgmMcJVwLajFklX6sM/category/keyword.json', params=params)
@@ -21,4 +21,9 @@ def most_trend_keywords_1d():
     return charts
     
 if __name__ == "__main__":
-    print(most_trend_keywords_1d())
+    # cid -> ALL or 5000000 etc..
+    cid = "ALL"
+
+    # period -> P1D or P7D
+    period = "P7D"
+    print(most_trend_keywords(cid,period))
