@@ -3,7 +3,7 @@ import requests
 import json
 import authorization
 import products_count
-import search_volume
+import search_volume_M
 
 if __name__ == "__main__" :
     keyword="마스크"
@@ -11,7 +11,7 @@ if __name__ == "__main__" :
     print(total_count)
 
     Authorization = authorization.authorization()
-    monthlyPcQcCnt, monthlyMobileQcCnt = search_volume.search_volume(keyword, Authorization)
+    monthlyPcQcCnt, monthlyMobileQcCnt = search_volume_M.search_volume(keyword, Authorization)
     print(monthlyPcQcCnt, monthlyMobileQcCnt)
 
     comp = total_count / (monthlyPcQcCnt+monthlyMobileQcCnt)

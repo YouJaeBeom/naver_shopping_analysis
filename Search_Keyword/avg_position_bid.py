@@ -16,13 +16,15 @@ def get_header(method, uri, api_key, secret_key, customer_id):
             'X-Timestamp': timestamp, 'X-API-KEY': API_KEY, 
             'X-Customer': str(CUSTOMER_ID), 'X-Signature': signature}
 
-def avg_position_bid():
+def avg_position_bid(device,itmes):
     uri = '/estimate/average-position-bid/keyword'
     method = 'POST'
-    r = requests.post(BASE_URL + uri, json={'device': 'PC', 'items': [{'key': '제주여행', 'position': 1}, {'key': '게스트하우스', 'position': 2}, {'key': '자전거여행', 'position': 3}]}, headers=get_header(method, uri, API_KEY, SECRET_KEY, CUSTOMER_ID))
+    r = requests.post(BASE_URL + uri, json={'device': device, 'items': itmes}, headers=get_header(method, uri, API_KEY, SECRET_KEY, CUSTOMER_ID))
 
     print("#response status_code = {}".format(r.status_code))
     print("#response body = {}".format(r.json()))
 
 if __name__ == "__main__" :
-    avg_position_bid()
+    device = "PC"
+    itmes = [{'key': '제주여행', 'position': 1}, {'key': '게스트하우스', 'position': 2}, {'key': '자전거여행', 'position': 3}]
+    avg_position_bid(device,itmes)

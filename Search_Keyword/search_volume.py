@@ -1,5 +1,6 @@
 import requests
 import json
+import authorization
 
 
 def search_volume(keyword, Authorization):
@@ -50,4 +51,10 @@ def search_volume(keyword, Authorization):
     monthlyMobileQcCnt =  response_json['keywordList'][0]['monthlyMobileQcCnt']
 
     return monthlyPcQcCnt, monthlyMobileQcCnt
+
+if __name__ == "__main__":
+    keyword = "마스크"
+    authorization = authorization.authorization()
+    monthlyPcQcCnt, monthlyMobileQcCnt = search_volume(keyword,authorization)
+    print(monthlyPcQcCnt, monthlyMobileQcCnt)
 

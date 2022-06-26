@@ -23,7 +23,6 @@ if __name__ == "__main__":
     print("most_trend_keywords_1d :", most_trend_keywords_1d)
 
 
-
     ## 기간 설정
     end = datetime.datetime.now().strftime('%Y-%m-%d')
     start = datetime.datetime.now() + datetime.timedelta(days=-31)
