@@ -18,7 +18,6 @@ def getagerate(cid, start, end, device, gender, age):
     }
 
     response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryAgeRate.naver',  headers=headers, data=data)
-
     response_json = json.loads(response.text)
     data =  response_json['result'][0]['data']
 
