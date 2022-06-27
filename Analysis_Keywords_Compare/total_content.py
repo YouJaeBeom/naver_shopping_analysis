@@ -2,20 +2,22 @@ import cafeCnt
 import blogCnt
 
 if __name__ == "__main__":
-    keyword = "나이키"
-    total_cafe_Cnt = cafeCnt.total_cafeCnt(keyword)
-    print("total_cafe_Cnt : ",total_cafe_Cnt)
+    keyword_list = ["마스크","나이키"]
 
-    total_blog_Cnt = blogCnt.total_blogCnt(keyword)
-    print("total_blogCnt : ",total_blog_Cnt)
+    for keyword in keyword_list:
+        total_cafe_Cnt = cafeCnt.total_cafeCnt(keyword)
+        print("total_cafe_Cnt : ",total_cafe_Cnt)
 
-    total_contentCnt = total_cafe_Cnt + total_blog_Cnt
-    print("total_contentCnt : ",total_contentCnt)
+        total_blog_Cnt = blogCnt.total_blogCnt(keyword)
+        print("total_blogCnt : ",total_blog_Cnt)
 
-    ## 카페 비율
-    cafeRat = (total_cafe_Cnt/total_contentCnt)*100
-    print("cafeRat : ",cafeRat)
+        total_contentCnt = total_cafe_Cnt + total_blog_Cnt
+        print("total_contentCnt : ",total_contentCnt)
 
-    ## 블로그 비율 
-    blogRat = (total_blog_Cnt/total_contentCnt)*100
-    print("blogRat : ",blogRat)
+        ## 카페 비율
+        cafeRat = (total_cafe_Cnt/total_contentCnt)*100
+        print("cafeRat : ",cafeRat)
+
+        ## 블로그 비율 
+        blogRat = (total_blog_Cnt/total_contentCnt)*100
+        print("blogRat : ",blogRat)
