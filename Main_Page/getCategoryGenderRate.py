@@ -17,7 +17,6 @@ def getgenderrate(cid, start, end, device, gender, age):
     }
 
     response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryGenderRate.naver', headers=headers, data=data)
-
     response_json = json.loads(response.text)
     data =  response_json['result'][0]['data']
 
@@ -31,13 +30,13 @@ if __name__ == "__main__":
     start = start.strftime('%Y-%m-%d')
 
     ## 카테고리 id 설정
-    cid = "50000000"
+    cid = "50000006"
     
     ## device 별
-    device = "ALL"
+    device = "pc,mo"
 
     ## Gener 
-    gender = "ALL" 
+    gender = "f,m" 
 
     ## 나이별
     age = "20,30,40"

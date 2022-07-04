@@ -3,18 +3,26 @@ from bs4 import BeautifulSoup
 import requests
 import json
 def most_viewed_products(cid,period):
-    params = {
-        'categoryCategoryId': cid,
-        'categoryChildCategoryId': '',
-        'categoryDemo': 'M04',
-        'categoryMidCategoryId': '',
-        'categoryRootCategoryId': cid,
-        'period': period,
+    json_data = {
+        'query': '\n        query CategoryProducts(\n          $categoryId: String\n          $demo: DemoType\n          $rankType: RankType\n          $period: RankPeriod\n          $productType: ProductType\n          $productCount: Int\n          $exposeLogSourceInfo: ExposeLogSourceInfo\n        ) {\n          CategoryProducts(\n            categoryId: $categoryId\n            demo: $demo\n            rankType: $rankType\n            period: $period\n            productType: $productType\n            productCount: $productCount\n            exposeLogSourceInfo: $exposeLogSourceInfo\n          ) {\n            categoryId\n            demo\n            period\n            rankType\n            rankedDate\n            products {\n              rank\n              nvMid\n              imageUrl\n              mobileLowPrice\n              priceUnit\n              productTitle\n              productName\n              mallCount\n              mallName\n              mallProductUrl\n              mallProdMblUrl\n              isNaverPay\n              isMblNaverPay\n              nPayPcType\n              nPayMblType\n              mpTp\n              dlvryCont\n              productCrUrl\n            }\n          }\n        }\n      ',
+        'variables': {
+            'demo': 'A00',
+            'rankType': 'CLICK',
+            'categoryId': cid,
+            'productCount': 100,
+            'period': period,
+            'productType': cid,
+            'exposeLogSourceInfo': {
+                'isMobileDomain': False,
+                'pageType': 'Category',
+            },
+        },
     }
 
-    response = requests.get('https://search.shopping.naver.com/best/_next/data/NurwgmMcJVwLajFklX6sM/category/click.json', params=params)
+
+    response = requests.post('https://search.shopping.naver.com/best/api/graphql',  json=json_data)    
     response_json = json.loads(response.text)
-    products =  response_json['pageProps']['dehydratedState']['queries'][2]['state']['data']['products']
+    products =  response_json['data']['CategoryProducts']['products']
 
     return products
 
@@ -23,5 +31,5 @@ if __name__ == "__main__":
     cid = "ALL"
 
     # period -> P1D or P7D
-    period = "P7D"
+    period = "P1D"
     print(most_viewed_products(cid,period))

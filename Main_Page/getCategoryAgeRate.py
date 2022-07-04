@@ -18,11 +18,11 @@ def getagerate(cid, start, end, device, gender, age):
     }
 
     response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryAgeRate.naver',  headers=headers, data=data)
-
     response_json = json.loads(response.text)
     data =  response_json['result'][0]['data']
 
     return data
+
 
 if __name__ == "__main__":
     ## 기간 설정
@@ -32,16 +32,16 @@ if __name__ == "__main__":
     start = start.strftime('%Y-%m-%d')
 
     ## 카테고리 id 설정
-    cid = "50000000"
+    cid = "50000006"
     
     ## device 별
-    device = "ALL"
+    device = "pc,mo"
 
     ## Gener 
-    gender = "ALL" 
+    gender = "f,m" 
 
     ## 나이별
     age = "20,30,40"
-
+    print(cid, start, end, device, gender, age)
     agerate = getagerate(cid, start, end, device, gender, age)
     print("getCategoryAgeRate :", (agerate))

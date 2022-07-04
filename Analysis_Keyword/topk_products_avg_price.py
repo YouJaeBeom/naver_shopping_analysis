@@ -76,7 +76,7 @@ if __name__ == "__main__" :
     top_40 = avg_products_price(keyword,40,1)
     top_40_avg_price = sum(top_40)/len(top_40)
     print(top_40)
-    print("sum(top_40) :", sum(top_10), "len(top_40 : ", len(top_40) , "avg_price : ", top_40_avg_price )
+    print("sum(top_40) :", sum(top_40), "len(top_40 : ", len(top_40) , "avg_price : ", top_40_avg_price )
 
     top_120 = avg_products_price(keyword,120,3)
     top_120_avg_price = sum(top_120)/len(top_120)
