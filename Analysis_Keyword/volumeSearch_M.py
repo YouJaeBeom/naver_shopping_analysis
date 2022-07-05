@@ -2,13 +2,11 @@ import requests
 import json
 import authorization
 
-def click_volume(keyword):
 
+def search_volume(keyword):
     Authorization = authorization.authorization()
-
     headers = {
         'Authorization': (Authorization),
-        'Referer': 'https://manage.searchad.naver.com/customers/2565665/tool/keyword-planner',
     }
 
     params = {
@@ -26,11 +24,14 @@ def click_volume(keyword):
     response = requests.get('https://manage.searchad.naver.com/keywordstool', params=params, headers=headers)
 
     response_json = json.loads(response.text)
-    monthlyAvePcClkCnt =  response_json['keywordList'][0]['monthlyAvePcClkCnt']
-    monthlyAveMobileClkCnt =  response_json['keywordList'][0]['monthlyAveMobileClkCnt']
+    monthlyPcQcCnt =  response_json['keywordList'][0]['monthlyPcQcCnt']
+    monthlyMobileQcCnt =  response_json['keywordList'][0]['monthlyMobileQcCnt']
 
-    return monthlyAvePcClkCnt, monthlyAveMobileClkCnt
+    return monthlyPcQcCnt, monthlyMobileQcCnt
 
-if __name__ == "__main__" :
-    monthlyAvePcClkCnt, monthlyAveMobileClkCnt = click_volume("마스크")
-    print(monthlyAvePcClkCnt, monthlyAveMobileClkCnt)
+if __name__ == "__main__":
+    keyword = "마스크"
+    authorization = authorization.authorization()
+    monthlyPcQcCnt, monthlyMobileQcCnt = search_volume(keyword,authorization)
+    print(monthlyPcQcCnt, monthlyMobileQcCnt)
+
