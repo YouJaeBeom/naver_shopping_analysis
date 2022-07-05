@@ -1,7 +1,6 @@
 import time
 import random
 import requests
-
 import signaturehelper
 
 BASE_URL = 'https://api.naver.com'
@@ -21,10 +20,12 @@ def avg_position_bid(device,itmes):
     method = 'POST'
     r = requests.post(BASE_URL + uri, json={'device': device, 'items': itmes}, headers=get_header(method, uri, API_KEY, SECRET_KEY, CUSTOMER_ID))
 
-    print("#response status_code = {}".format(r.status_code))
-    print("#response body = {}".format(r.json()))
+    #print("#response status_code = {}".format(r.status_code))
+    #print("#response body = {}".format(r.json()))
+    return r.json()
 
 if __name__ == "__main__" :
     device = "PC"
     itmes = [{'key': '제주여행', 'position': 1}, {'key': '게스트하우스', 'position': 2}, {'key': '자전거여행', 'position': 3}]
-    avg_position_bid(device,itmes)
+    avg_position_bid = avg_position_bid(device,itmes)
+    print("avg_position_bid : ", avg_position_bid)
