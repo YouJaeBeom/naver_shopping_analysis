@@ -1,4 +1,4 @@
-import search_volume
+import volumeSearch
 import blogCnt
 import cafeCnt
 import authorization
@@ -6,8 +6,7 @@ import authorization
 if __name__ == "__main__" :
     keyword = "나이키"
 
-    Authorization = authorization.authorization()
-    monthlyPcQcCnt, monthlyMobileQcCnt = search_volume.search_volume(keyword,Authorization)
+    monthlyPcQcCnt, monthlyMobileQcCnt = volumeSearch.search_volume(keyword)
     print("monthlyPcQcCnt : ", monthlyPcQcCnt, "monthlyMobileQcCnt : ", monthlyMobileQcCnt)
 
     ## 블로그 포화도
