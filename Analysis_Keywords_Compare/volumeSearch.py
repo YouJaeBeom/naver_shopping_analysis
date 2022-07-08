@@ -6,7 +6,7 @@ import authorization
 def search_volume(keyword):
     Authorization = authorization.authorization()
     headers = {
-        'Authorization': (Authorization),
+        'Authorization': str(Authorization),
     }
 
     params = {

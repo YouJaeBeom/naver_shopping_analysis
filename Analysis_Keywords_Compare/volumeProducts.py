@@ -1,8 +1,8 @@
-from pip import main
 import requests
 import json
 
-def avg_products_price(keyword):
+
+def products_count(keyword):
     params = {
         'sort': 'rel',
         'pagingIndex': '1',
@@ -23,17 +23,11 @@ def avg_products_price(keyword):
     response = requests.get('https://search.shopping.naver.com/api/search/all', params=params)
 
     response_json = json.loads(response.text)
-    data_list =  response_json['shoppingResult']['products']
+    total_count =  response_json['shoppingResult']['total']
 
-    price_list = []
-    for data in data_list:
-        price_list.append(float(data['price']))
-    avg_products_price = sum(price_list)/len(price_list)
+    return  total_count 
 
-    return avg_products_price
-
-if __name__ == "__main__" : 
-    keyword="애플워치"
-    avg_products_price = avg_products_price(keyword)
-
-    print("avg_products_price : ", avg_products_price)
+if __name__ == "__main__" :
+    keyword="마스크"
+    total_count= products_count(keyword)
+    print(total_count)
