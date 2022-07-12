@@ -1,7 +1,7 @@
 import requests
 import json
 
-def trend_keywords_detail(keyword,cid,period,rankedDate):
+def trend_keywords_detail(keyword,cid,period,demo,rankedDate):
     
     json_data = {
         'query': '\n      query ChartProductList($params: ChartProductListInput, $exposeLogSourceInfo: ExposeLogSourceInfo) {\n        KeywordChartProductList(params: $params, exposeLogSourceInfo: $exposeLogSourceInfo) {\n            nvMid\n            imageUrl\n            mobileLowPrice\n            priceUnit\n            productTitle\n            purchaseCnt\n            mallCount\n            mpTp\n            reviewCount\n            mallProductUrl\n            mallProdMblUrl\n            dlvryCd\n            productCrUrl\n        }\n      }\n    ',
@@ -10,9 +10,9 @@ def trend_keywords_detail(keyword,cid,period,rankedDate):
                 'chartTitle': keyword,
                 'categoryId': cid,
                 'rankedDate': rankedDate,
-                'demo': 'A00',
+                'demo': demo,
                 'period': period,
-                'productType': cid,
+                'productType': "ALL",
                 'rankStart': 1,
                 'rankEnd': 20,
             },
@@ -27,5 +27,4 @@ def trend_keywords_detail(keyword,cid,period,rankedDate):
     response_json = json.loads(response.text)
     charts =  response_json['data']['KeywordChartProductList']
     
-    print("charts ", response_json)
     return charts
