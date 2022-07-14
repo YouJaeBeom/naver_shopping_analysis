@@ -50,8 +50,17 @@ def most_purchase_products(cid,period,demo):
             },
         },
     }
-
-    response = requests.post('https://search.shopping.naver.com/best/api/graphql',  json=json_data)
+    ## setting tor
+    proxies = {
+        'http': 'socks5://127.0.0.1:9050',
+        'https': 'socks5://127.0.0.1:9050',
+    }
+    
+    response = requests.post(
+        'https://search.shopping.naver.com/best/api/graphql',  
+        json=json_data,
+        proxies = proxies
+        )
     response_json = json.loads(response.text)
     products =  response_json['data']['CategoryProducts']['products']
 

@@ -6,7 +6,7 @@ def ads_related_keywords(keyword):
     Authorization = authorization.authorization()
 
     headers = {
-        'Authorization': Authorizationz,
+        'Authorization': Authorization,
     }
 
     params = {

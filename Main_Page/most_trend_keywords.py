@@ -2,6 +2,7 @@ import json
 import requests
 import most_trend_keywords_detail
 import datetime
+import time
 
 def insertDB(categoryId,rankedDate,period,demo,rank, keyword, rankedReason ,mobileLowPrice,productTitle,productCrUrl):
     import pymysql
@@ -51,8 +52,17 @@ def most_trend_keywords(cid,period,demo):
             },
         },
     }
+    ## setting tor
+    proxies = {
+        'http': 'socks5://127.0.0.1:9050',
+        'https': 'socks5://127.0.0.1:9050',
+    }
 
-    response = requests.post('https://search.shopping.naver.com/best/api/graphql', json=json_data)
+    response = requests.post(
+        'https://search.shopping.naver.com/best/api/graphql', 
+        json=json_data,
+        proxies = proxies
+        )
     response_json = json.loads(response.text)
 
     rankedDate =  response_json['data']['KeywordChartList']['rankedDate']
@@ -65,7 +75,7 @@ def most_trend_keywords(cid,period,demo):
         rank = chart['rank']
         keyword = chart['keyword']
         rankedReason = chart['rankedReason']
-
+        time.sleep(0.1)
         products = most_trend_keywords_detail.trend_keywords_detail(keyword,cid,period,demo,rankedDate)
         for product in products:
             mobileLowPrice = product['mobileLowPrice']
@@ -85,7 +95,7 @@ if __name__ == "__main__":
     # period -> P1D or P7D
     period = "P1D"
 
-    ## 나이, 성별대 
+    ## 나이, 성별대  
     ## M01, F01 .... M05, F05, A00
     demo = "A00"
     print(most_trend_keywords(cid,period,demo))
