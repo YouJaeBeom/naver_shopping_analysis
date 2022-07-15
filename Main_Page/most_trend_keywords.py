@@ -3,7 +3,7 @@ import requests
 import most_trend_keywords_detail
 import datetime
 import time
-
+import tor
 def insertDB(categoryId,rankedDate,period,demo,rank, keyword, rankedReason ,mobileLowPrice,productTitle,productCrUrl):
     import pymysql
     db_name = "test"
@@ -55,35 +55,40 @@ def most_trend_keywords(cid,period,demo):
     ## setting tor
     proxies = {
         'http': 'socks5://127.0.0.1:9050',
-        'https': 'socks5://127.0.0.1:9050',
     }
 
-    response = requests.post(
-        'https://search.shopping.naver.com/best/api/graphql', 
+    try:
+        response = requests.post(
+        'https://msearch.shopping.naver.com/best/api/graphql', 
         json=json_data,
         proxies = proxies
         )
-    response_json = json.loads(response.text)
+    except requests.ConnectionError as ex:
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        response_json = json.loads(response.text)
 
-    rankedDate =  response_json['data']['KeywordChartList']['rankedDate']
-    period =  response_json['data']['KeywordChartList']['period']
-    demo =  response_json['data']['KeywordChartList']['demo']
-    categoryId =  response_json['data']['KeywordChartList']['categoryId']
-    charts =  response_json['data']['KeywordChartList']['charts']
+        rankedDate =  response_json['data']['KeywordChartList']['rankedDate']
+        period =  response_json['data']['KeywordChartList']['period']
+        demo =  response_json['data']['KeywordChartList']['demo']
+        categoryId =  response_json['data']['KeywordChartList']['categoryId']
+        charts =  response_json['data']['KeywordChartList']['charts']
 
-    for chart in charts:
-        rank = chart['rank']
-        keyword = chart['keyword']
-        rankedReason = chart['rankedReason']
-        time.sleep(0.1)
-        products = most_trend_keywords_detail.trend_keywords_detail(keyword,cid,period,demo,rankedDate)
-        for product in products:
-            mobileLowPrice = product['mobileLowPrice']
-            productTitle = product['productTitle']
-            productCrUrl = product['productCrUrl']
-            
-            print(rank, keyword, productTitle)
-            insertDB(categoryId,rankedDate,period,demo,rank, keyword, rankedReason ,mobileLowPrice,productTitle,productCrUrl)
+        for chart in charts:
+            rank = chart['rank']
+            keyword = chart['keyword']
+            rankedReason = chart['rankedReason']
+            time.sleep(0.1)
+            products = most_trend_keywords_detail.trend_keywords_detail(keyword,cid,period,demo,rankedDate)
+            for product in products:
+                mobileLowPrice = product['mobileLowPrice']
+                productTitle = product['productTitle']
+                productCrUrl = product['productCrUrl']
+                
+                print(rank, keyword, productTitle)
+                insertDB(categoryId,rankedDate,period,demo,rank, keyword, rankedReason ,mobileLowPrice,productTitle,productCrUrl)
 
     return charts
     

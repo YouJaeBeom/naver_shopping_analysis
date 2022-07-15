@@ -53,32 +53,37 @@ def most_purchase_products(cid,period,demo):
     ## setting tor
     proxies = {
         'http': 'socks5://127.0.0.1:9050',
-        'https': 'socks5://127.0.0.1:9050',
     }
     
-    response = requests.post(
-        'https://search.shopping.naver.com/best/api/graphql',  
+    try:
+        response = requests.post(
+        'https://msearch.shopping.naver.com/best/api/graphql', 
         json=json_data,
         proxies = proxies
         )
-    response_json = json.loads(response.text)
-    products =  response_json['data']['CategoryProducts']['products']
+    except requests.ConnectionError as ex:
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        response_json = json.loads(response.text)
+        products =  response_json['data']['CategoryProducts']['products']
 
-    categoryId = response_json['data']['CategoryProducts']['categoryId']
-    rankedDate =  response_json['data']['CategoryProducts']['rankedDate']
-    period = response_json['data']['CategoryProducts']['period']
-    demo = response_json['data']['CategoryProducts']['demo']
+        categoryId = response_json['data']['CategoryProducts']['categoryId']
+        rankedDate =  response_json['data']['CategoryProducts']['rankedDate']
+        period = response_json['data']['CategoryProducts']['period']
+        demo = response_json['data']['CategoryProducts']['demo']
 
-    products =  response_json['data']['CategoryProducts']['products']
+        products =  response_json['data']['CategoryProducts']['products']
 
-    for product in products:
-        rank = product['rank']
-        mobileLowPrice = product['mobileLowPrice']
-        productTitle = product['productTitle']
-        mallCount = product['mallCount']
-        productCrUrl = product['productCrUrl']
+        for product in products:
+            rank = product['rank']
+            mobileLowPrice = product['mobileLowPrice']
+            productTitle = product['productTitle']
+            mallCount = product['mallCount']
+            productCrUrl = product['productCrUrl']
 
-        insertDB(categoryId,rankedDate,period,demo,rank,mobileLowPrice,productTitle,mallCount,productCrUrl)
+            insertDB(categoryId,rankedDate,period,demo,rank,mobileLowPrice,productTitle,mallCount,productCrUrl)
 
 if __name__ == "__main__":
     # cid -> ALL or 5000000 etc..

@@ -26,16 +26,20 @@ def trend_keywords_detail(keyword,cid,period,demo,rankedDate):
     ## setting tor
     proxies = {
         'http': 'socks5://127.0.0.1:9050',
-        'https': 'socks5://127.0.0.1:9050',
     }
 
-    response = requests.post(
-        'https://search.shopping.naver.com/best/api/graphql', 
+    try:
+        response = requests.post(
+        'https://msearch.shopping.naver.com/best/api/graphql', 
         json=json_data,
         proxies = proxies
         )
-
-    response_json = json.loads(response.text)
-    charts =  response_json['data']['KeywordChartProductList']
+    except requests.ConnectionError as ex:
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        response_json = json.loads(response.text)
+        charts =  response_json['data']['KeywordChartProductList']
     
     return charts
