@@ -40,8 +40,9 @@ if __name__ == "__main__":
     ## Gener 
     gender = "f,m" 
 
-    ## 나이별
+    ## 나이별 "10,20,30,40,50,60"
     age = "20,30,40"
+    
     print(cid, start, end, device, gender, age)
     agerate = getagerate(cid, start, end, device, gender, age)
     print("getCategoryAgeRate :", (agerate))

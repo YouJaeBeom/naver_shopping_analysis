@@ -70,7 +70,7 @@ def most_viewed_products(cid,period,demo):
     try: 
         #s = requests.Session()
         response = requests.post(
-            'https://search.shopping.naver.com/best/api/graphql',  
+            'https://msearch.shopping.naver.com/best/api/graphql',  
             json = json_data,
             proxies = proxies
         )    

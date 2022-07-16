@@ -1,6 +1,6 @@
 import requests
 import json
-
+import tor
 def insertDB(categoryId,rankedDate,period,demo,rank,mobileLowPrice,productTitle,mallCount,productCrUrl):
     import pymysql
     db_name = "test"
