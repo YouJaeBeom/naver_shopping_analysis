@@ -6,10 +6,17 @@ def getrelated_tag(mallProductId):
     response = requests.get('https://smartstore.naver.com/main/products/'+mallProductId)
     soup = bs(response.text, "html.parser")
     
-    # _2RkVi-H2ze N=a:itm.tag
-    # _2RkVi-H2ze N=a:itm.tag
-    related_tags = soup.find_all("a",class_='_3SMi-TrYq2')
+    related_tags = soup.find_all("script")
 
+    body = str(related_tags[1]).replace("<script>window.__PRELOADED_STATE__=","").replace("</script>","")
+    
+    response_json = json.loads(body)
+    related_tags = response_json['product']['A']['seoInfo']['sellerTags']
+    #st_json3 = json.dumps(response_json, indent=4,ensure_ascii=False)
+
+    """with open("text.txt","w") as f:
+        f.write(str(related_tags))"""
+    
     return related_tags
 
 def getQnA(mallProductId):
@@ -19,12 +26,17 @@ def getQnA(mallProductId):
 
     return qnaCnt 
 
-def getinfo(mallProductId):
+def getStoreKeepCnt(mallProductId):
     response = requests.get('https://smartstore.naver.com/main/products/'+mallProductId)
     soup = bs(response.text, "html.parser")
 
+    store_keepCnt = soup.find("span", class_ = 'number').text
+
+    return store_keepCnt 
+
+def getinfo(mallProductId):
     try:
-        store_keepCnt = soup.find("span", class_ = 'number').text
+        store_keepCnt = getStoreKeepCnt(mallProductId)
     except Exception as e:
         print(e)
         store_keepCnt = None
@@ -45,4 +57,4 @@ def getinfo(mallProductId):
 
 
 if __name__ == "__main__":
-    print(getrelated_tag("6176787621"))
+    print(getStoreKeepCnt("6176787621"))

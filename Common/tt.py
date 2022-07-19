@@ -1,11 +1,15 @@
-
-from bs4 import BeautifulSoup
 import requests
-import json
+from stem.control import Controller
+from stem import Signal
 
-
-
-
+def renew_tor_ip(port_num):
+    with Controller.from_port(port = port_num) as controller:
+        controller.authenticate(password="mnet")
+        controller.signal(Signal.NEWNYM)
+## setting tor
+proxies = {
+    'http': 'socks5://localhost:9050',
+}
 
 cookies = {
     'autocomplete': 'use',
@@ -18,27 +22,33 @@ cookies = {
     'MM_NEW': '1',
     'SHP_BID': '6',
     'nx_ssl': '2',
+    'sus_val': 'Py7yXiuxaXx/29ZBt0JCZl7N',
     'spage_uid': '',
-    '066c80626d06ffa5b32035f35cabe88d': 'j%C2%C3%F4F%26Bn%C1%D7KUBX%99%11%01%7D%83M%B08e%1E%0E%3A%B7Y%ED3%E8%E2%15g%B4k%0E%7CTsH%98%B34%DE%3C%E2xU%E7%A8%8EJ%3B%1C%BBHnL%8B%99%C3%8E2%91%92%AC%14%F0%A7M%0C%A6%82%1B%ED%9D%5B6%FF%DDl%F3%3D%C3%B6%B1%92%9328%E6%08%CD%B6%B4%3C%3F%8E%60Rs%5D%15%A8%C0%E3%EB%3A2t%9B%B4%82%CB%9A%1C%27%06%D4%A1nAH%1F8O%60%C9%EBM%18%BB%91%B2%C6',
-    '1a5b69166387515780349607c54875af': '%C1%F9%27nc%D2%A4%82',
-    'sus_val': 'uvbggiYOaL5564iKILVudDoW',
 }
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0) Gecko/20100101 Firefox/102.0',
-    'Accept': 'application/json, text/plain, */*',
-    # 'Accept-Encoding': 'gzip, deflate, br',
-    'Referer': 'https://search.shopping.naver.com/best/category/click?categoryCategoryId=ALL&categoryChildCategoryId=&categoryDemo=M02&categoryMidCategoryId=&categoryRootCategoryId=ALL&chartRank=1&period=P1D',
-    'Connection': 'keep-alive',
-    # Requests sorts cookies= alphabetically
-    # 'Cookie': 'autocomplete=use; NNB=DULXWITNGSGGE; AD_SHP_BID=14; ASID=dc957c49000001810000e7bc00000053; _ga_7VKFYR6RV1=GS1.1.1655549940.3.0.1655549940.60; _ga=GA1.2.678320805.1655285848; NFS=2; MM_NEW=1; SHP_BID=6; nx_ssl=2; spage_uid=; 066c80626d06ffa5b32035f35cabe88d=j%C2%C3%F4F%26Bn%C1%D7KUBX%99%11%01%7D%83M%B08e%1E%0E%3A%B7Y%ED3%E8%E2%15g%B4k%0E%7CTsH%98%B34%DE%3C%E2xU%E7%A8%8EJ%3B%1C%BBHnL%8B%99%C3%8E2%91%92%AC%14%F0%A7M%0C%A6%82%1B%ED%9D%5B6%FF%DDl%F3%3D%C3%B6%B1%92%9328%E6%08%CD%B6%B4%3C%3F%8E%60Rs%5D%15%A8%C0%E3%EB%3A2t%9B%B4%82%CB%9A%1C%27%06%D4%A1nAH%1F8O%60%C9%EBM%18%BB%91%B2%C6; 1a5b69166387515780349607c54875af=%C1%F9%27nc%D2%A4%82; sus_val=uvbggiYOaL5564iKILVudDoW',
-    'Sec-Fetch-Dest': 'empty',
-    'Sec-Fetch-Mode': 'cors',
-    'Sec-Fetch-Site': 'same-origin',
-    # Requests doesn't support trailers
-    # 'TE': 'trailers',
 }
 
-response = requests.get('https://search.shopping.naver.com/best/api/product-zzim/products?nvMid=29324979618,21241320389,26296562522,23233955490,31437592618,28092673522,32618657618,30355040618,30646028058,26697153522,27314394522,22015364919,22376501077,29301868619,32071026618,29633984621,28579165659,15573447747,27062883522,30675706618,26408133522,30367522618,30442851618,30503407618,26612353525,29156964618,29201823618,31806674618,30142543618,28844532586,30243464618,25537801522,32073646618,30314045620,28877267039,32004211618,32086333618,15651160323,31451374618,22895211426,32997097618,30281169619,29156906618,28317989555,15251875249,29844293618,21081543819,20525413491,30590766618,32577572618,12606776125,15458155124,18865576373,22663888648,27896057523,24823688522,24280243522,32985886618,27230887522,27896056522,30479519644,24074754524,21738600339,31945478618,24634618522,31597134649,25082012522,28742487556,27137474067,10716299365,28680159554,27109550522,84333091088,27907574522,28873549586,24803503629,24803296321,29832299618,27137540258,31134408618,28496782554,16929170157,30861336618,20072615412,32086389622,24564981522,28593117769,14483676957,19137836335,29228760618,20768244230,30442940618,23390773490,12480664678,26237535522', cookies=cookies, headers=headers)
+params = {
+    'sort': 'rel',
+    'pagingIndex': '2',
+    'pagingSize': '40',
+    'viewType': 'list',
+    'productSet': 'total',
+    'deliveryFee': '',
+    'deliveryTypeValue': '',
+    'frm': 'NVSHATC',
+    'query': '마스크',
+    'origQuery': '마스크',
+    'iq': '',
+    'eq': '',
+    'xq': '',
+}
+
+response = requests.get('https://search.shopping.naver.com/api/search/all', params=params,  headers=headers, proxies=proxies)
 
 print(response.text)
+
+renew_tor_ip(9051)
+print(requests.get('http://icanhazip.com/', timeout=24, proxies = proxies).text) # outputs proxy IP
