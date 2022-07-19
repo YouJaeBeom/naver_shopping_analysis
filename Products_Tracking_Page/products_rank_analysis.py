@@ -40,7 +40,7 @@ def insertDB(rank, productName, product_id, category1Id, category2Id, category3I
                     store_keepCnt, 
                     qnaCnt, 
                     score, 
-                    related_tag))
+                    str(related_tag)))
                 print("product_rank_analysis insert!!!!!", (rank, productName, product_id, category1Id, category2Id, category3Id, category4Id, mallName, openDate, mallGrade, price, reviewCount, purchaseCnt, keepCnt, store_keepCnt, qnaCnt, score, related_tag))
             except Exception as ex:
                 print(ex, "Most_ViewProducts insert!!!!!", (rank, productName, product_id, category1Id, category2Id, category3Id, category4Id, mallName, openDate, mallGrade, price, reviewCount, purchaseCnt, keepCnt, store_keepCnt, qnaCnt, score, related_tag))
