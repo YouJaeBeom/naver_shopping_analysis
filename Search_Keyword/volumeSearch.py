@@ -1,7 +1,7 @@
 import requests
 import json
 import authorization
-
+import tor 
 
 def search_volume(keyword):
     Authorization = authorization.authorization()
@@ -23,13 +23,22 @@ def search_volume(keyword):
         'keyword': '',
     }
 
-    response = requests.get('https://manage.searchad.naver.com/keywordstool', params=params, headers=headers)
+    ## setting tor
+    proxies = {
+        'http': 'socks5://localhost:9050',
+    }
+    try:
+        response = requests.get('https://manage.searchad.naver.com/keywordstool', params=params, headers=headers, proxies=proxies)
+    except requests.ConnectionError as ex:
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        response_json = json.loads(response.text)
+        monthlyPcQcCnt =  response_json['keywordList'][0]['monthlyPcQcCnt']
+        monthlyMobileQcCnt =  response_json['keywordList'][0]['monthlyMobileQcCnt']
 
-    response_json = json.loads(response.text)
-    monthlyPcQcCnt =  response_json['keywordList'][0]['monthlyPcQcCnt']
-    monthlyMobileQcCnt =  response_json['keywordList'][0]['monthlyMobileQcCnt']
-
-    return monthlyPcQcCnt, monthlyMobileQcCnt
+        return monthlyPcQcCnt, monthlyMobileQcCnt
 
 if __name__ == "__main__":
     keyword = "마스크"

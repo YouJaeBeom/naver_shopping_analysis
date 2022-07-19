@@ -83,7 +83,6 @@ def ranking_tracking_PC(keyword, pagingIndex):
         'pagingSize': '80',
         'viewType': 'list',
         'productSet': 'checkout',
-        'frm': 'NVSHCHK',
         'query': keyword,
         'origQuery': keyword,
     }
@@ -125,7 +124,7 @@ def ranking_tracking_PC(keyword, pagingIndex):
 
 def ranking_tracking_MOB(keyword, pagingIndex):
     headers = {
-        'Referer': 'https://msearch.shopping.naver.com/search/all?query={}&frm=NVSHSRC&prevQuery={}'.format(keyword,keyword).encode('utf-8').decode('iso-8859-1'),
+        'Referer': 'https://msearch.shopping.naver.com/search/all?query={}'.format(keyword).encode('utf-8').decode('iso-8859-1'),
     }
 
     params = {
@@ -135,7 +134,6 @@ def ranking_tracking_MOB(keyword, pagingIndex):
         'pagingSize': '80',
         'viewType': 'lst',
         'productSet': 'total',
-        'frm': 'NVSHPAG',
         'origQuery': keyword,
     }
 

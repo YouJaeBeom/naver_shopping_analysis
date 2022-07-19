@@ -3,36 +3,66 @@ import json
 from bs4 import BeautifulSoup as bs
 
 def getrelated_tag(mallProductId): 
-    response = requests.get('https://smartstore.naver.com/main/products/'+mallProductId)
-    soup = bs(response.text, "html.parser")
-    
-    related_tags = soup.find_all("script")
+    ## setting tor
+    proxies = {
+        'http': 'socks5://localhost:9050',
+    }
+    try:
+        response = requests.get('https://smartstore.naver.com/main/products/'+mallProductId, proxies=proxies)
+    except :
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        soup = bs(response.text, "html.parser")
+        
+        related_tags = soup.find_all("script")
 
-    body = str(related_tags[1]).replace("<script>window.__PRELOADED_STATE__=","").replace("</script>","")
-    
-    response_json = json.loads(body)
-    related_tags = response_json['product']['A']['seoInfo']['sellerTags']
-    #st_json3 = json.dumps(response_json, indent=4,ensure_ascii=False)
+        body = str(related_tags[1]).replace("<script>window.__PRELOADED_STATE__=","").replace("</script>","")
+        
+        response_json = json.loads(body)
+        related_tags = response_json['product']['A']['seoInfo']['sellerTags']
+        #st_json3 = json.dumps(response_json, indent=4,ensure_ascii=False)
 
-    """with open("text.txt","w") as f:
-        f.write(str(related_tags))"""
-    
-    return related_tags
+        """with open("text.txt","w") as f:
+            f.write(str(related_tags))"""
+        
+        return related_tags
 
 def getQnA(mallProductId):
-    response = requests.get('https://smartstore.naver.com/i/v1/comments/PRODUCTINQUIRY/'+mallProductId)
-    response_json = json.loads(response.text)
-    qnaCnt =  response_json['totalElements']
+    ## setting tor
+    proxies = {
+        'http': 'socks5://localhost:9050',
+    }
+    try:
+        response = requests.get('https://smartstore.naver.com/i/v1/comments/PRODUCTINQUIRY/'+mallProductId, proxies=proxies)
+    except :
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        response_json = json.loads(response.text)
+        qnaCnt =  response_json['totalElements']
 
-    return qnaCnt 
+        return qnaCnt 
 
 def getStoreKeepCnt(mallProductId):
-    response = requests.get('https://smartstore.naver.com/main/products/'+mallProductId)
-    soup = bs(response.text, "html.parser")
+    ## setting tor
+    proxies = {
+        'http': 'socks5://localhost:9050',
+    }
+    try:
+        response = requests.get('https://smartstore.naver.com/main/products/'+mallProductId, proxies=proxies)
+    except :
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        soup = bs(response.text, "html.parser")
 
-    store_keepCnt = soup.find("span", class_ = 'number').text
+        store_keepCnt = soup.find("span", class_ = 'number').text
 
-    return store_keepCnt 
+        return store_keepCnt 
 
 def getinfo(mallProductId):
     try:
@@ -57,4 +87,4 @@ def getinfo(mallProductId):
 
 
 if __name__ == "__main__":
-    print(getStoreKeepCnt("6176787621"))
+    print(getrelated_tag("6176787621"))

@@ -1,6 +1,7 @@
 import requests
 import json
 import authorization
+import tor 
 
 def click_volume(keyword):
 
@@ -23,14 +24,24 @@ def click_volume(keyword):
         'keyword': '',
     }
 
-    response = requests.get('https://manage.searchad.naver.com/keywordstool', params=params, headers=headers)
+    ## setting tor
+    proxies = {
+        'http': 'socks5://localhost:9050',
+    }
+    try:
+        response = requests.get('https://manage.searchad.naver.com/keywordstool', params=params, headers=headers, proxies=proxies)
+    except requests.ConnectionError as ex:
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        response_json = json.loads(response.text)
+        monthlyAvePcClkCnt =  response_json['keywordList'][0]['monthlyAvePcClkCnt']
+        monthlyAveMobileClkCnt =  response_json['keywordList'][0]['monthlyAveMobileClkCnt']
 
-    response_json = json.loads(response.text)
-    monthlyAvePcClkCnt =  response_json['keywordList'][0]['monthlyAvePcClkCnt']
-    monthlyAveMobileClkCnt =  response_json['keywordList'][0]['monthlyAveMobileClkCnt']
-
-    return monthlyAvePcClkCnt, monthlyAveMobileClkCnt
+        return monthlyAvePcClkCnt, monthlyAveMobileClkCnt
 
 if __name__ == "__main__" :
-    monthlyAvePcClkCnt, monthlyAveMobileClkCnt = click_volume("마스크")
+    keyword="마스크"
+    monthlyAvePcClkCnt, monthlyAveMobileClkCnt = click_volume(keyword)
     print(monthlyAvePcClkCnt, monthlyAveMobileClkCnt)

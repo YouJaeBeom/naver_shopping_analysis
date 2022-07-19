@@ -1,11 +1,15 @@
 import requests
 import json
 import time 
-
+import tor 
 def top_related_keywords(cid,start,end):
 
     top_related_keywords_list = []
-
+    ## setting tor
+    proxies = {
+        'http': 'socks5://localhost:9050',
+    }
+    
     for pageInd in range(1,26):
         time.sleep(0.1)
         headers = {
@@ -24,13 +28,18 @@ def top_related_keywords(cid,start,end):
             'page': str(pageInd),
             'count': '20',
         }
-
-        response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryKeywordRank.naver', headers=headers, data=data)
-        response_json = json.loads(response.text)
-        ranks = response_json['ranks']
-        
-        for rank in ranks: 
-            top_related_keywords_list.append(rank)
+        try:
+            response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryKeywordRank.naver', headers=headers, data=data, proxies=proxies)
+        except requests.ConnectionError as ex:
+            tor.renew_tor_ip(9051)
+            print("ex = ", ex)
+            print()
+        else:
+            response_json = json.loads(response.text)
+            ranks = response_json['ranks']
+            
+            for rank in ranks: 
+                top_related_keywords_list.append(rank)
     
     return top_related_keywords_list
 

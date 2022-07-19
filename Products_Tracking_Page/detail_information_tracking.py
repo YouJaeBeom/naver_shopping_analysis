@@ -1,21 +1,45 @@
 import requests
 import json
 from bs4 import BeautifulSoup as bs
-
+import tor
 
 def getQnA(mallProductId):
-    response = requests.get('https://smartstore.naver.com/i/v1/comments/PRODUCTINQUIRY/'+mallProductId)
-    response_json = json.loads(response.text)
-    qnaCnt =  response_json['totalElements']
+    ## setting tor
+    proxies = {
+        'http': 'socks5://localhost:9050',
+    }
+    try:
+        response = requests.get('https://smartstore.naver.com/i/v1/comments/PRODUCTINQUIRY/'+mallProductId, proxies=proxies)
+        response_json = json.loads(response.text)
+    except :
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        qnaCnt =  response_json['totalElements']
 
-    return qnaCnt 
+        return qnaCnt 
 
-def getinfo(mallProductId):
-    response = requests.get('https://smartstore.naver.com/main/products/'+mallProductId)
-    soup = bs(response.text, "html.parser")
+def getstore_keepCnt(mallProductId):
+    ## setting tor
+    proxies = {
+        'http': 'socks5://localhost:9050',
+    }
 
     try:
+        response = requests.get('https://smartstore.naver.com/main/products/'+mallProductId, proxies=proxies)
+        soup = bs(response.text, "html.parser")
+    except :
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
         store_keepCnt = soup.find("span", class_ = 'number').text
+        return store_keepCnt
+
+def getinfo(mallProductId):
+    try:
+        store_keepCnt = getstore_keepCnt(mallProductId)
     except Exception as e:
         print(e)
         store_keepCnt = None

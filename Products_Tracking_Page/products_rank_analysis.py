@@ -51,7 +51,7 @@ def insertDB(rank, productName, product_id, category1Id, category2Id, category3I
 
 def ranking_analysis(keyword, pagingIndex):
     headers = {
-        'Referer': 'https://msearch.shopping.naver.com/search/all?query={}&frm=NVSHSRC'.format(keyword).encode('utf-8').decode('iso-8859-1'),
+        'Referer': 'https://msearch.shopping.naver.com/search/all?query={}'.format(keyword).encode('utf-8').decode('iso-8859-1'),
     }
 
     params = {
@@ -60,7 +60,6 @@ def ranking_analysis(keyword, pagingIndex):
         'pagingSize': '80',
         'viewType': 'list',
         'productSet': 'total',
-        'frm': 'NVSHPAG',
         'query': keyword,
         'origQuery': keyword,
     }
