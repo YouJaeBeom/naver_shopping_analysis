@@ -1,6 +1,6 @@
 import requests
 import json
-
+import tor
 
 def products_count(keyword):
     params = {
@@ -19,13 +19,21 @@ def products_count(keyword):
         'xq': '',
         'window': '',
     }
+    ## setting tor
+    proxies = {
+        'http': 'socks5://127.0.0.1:9050',
+    }
+    try:
+        response = requests.get('https://search.shopping.naver.com/api/search/all', params=params)
+    except requests.ConnectionError as ex:
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        response_json = json.loads(response.text)
+        total_count =  response_json['shoppingResult']['total']
 
-    response = requests.get('https://search.shopping.naver.com/api/search/all', params=params)
-
-    response_json = json.loads(response.text)
-    total_count =  response_json['shoppingResult']['total']
-
-    return  total_count 
+        return  total_count 
 
 if __name__ == "__main__" :
     keyword="마스크"

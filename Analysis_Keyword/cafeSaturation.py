@@ -6,8 +6,7 @@ import authorization
 if __name__ == "__main__" :
     keyword = "나이키"
 
-    Authorization = authorization.authorization()
-    monthlyPcQcCnt, monthlyMobileQcCnt = volumeSearch_M.search_volume(keyword,Authorization)
+    monthlyPcQcCnt, monthlyMobileQcCnt = volumeSearch_M.search_volume(keyword)
     print("monthlyPcQcCnt : ", monthlyPcQcCnt, "monthlyMobileQcCnt : ", monthlyMobileQcCnt)
 
 

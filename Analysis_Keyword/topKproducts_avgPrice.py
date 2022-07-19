@@ -1,10 +1,13 @@
 from pip import main
 import requests
 import json
-
+import tor
 def avg_products_price(keyword, top,repeat):
     price_list = []
-
+    ## setting tor
+    proxies = {
+        'http': 'socks5://127.0.0.1:9050',
+    }
     for pagenumber in range(1,repeat+1):
         params = {
             'sort': 'rel',
@@ -22,14 +25,18 @@ def avg_products_price(keyword, top,repeat):
             'xq': '',
             'window': '',
         }
+        try:
+            response = requests.get('https://search.shopping.naver.com/api/search/all', params=params, proxies=proxies)
+        except requests.ConnectionError as ex:
+            tor.renew_tor_ip(9051)
+            print("ex = ", ex)
+            print()
+        else:
+            response_json = json.loads(response.text)
+            data_list =  response_json['shoppingResult']['products']
 
-        response = requests.get('https://search.shopping.naver.com/api/search/all', params=params)
-
-        response_json = json.loads(response.text)
-        data_list =  response_json['shoppingResult']['products']
-
-        for data in data_list[:]:
-            price_list.append(float(data['price']))
+            for data in data_list[:]:
+                price_list.append(float(data['price']))
     
     return price_list[:top]
     

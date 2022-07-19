@@ -1,5 +1,7 @@
 import requests
 import json
+import tor 
+
 def getgenderrate(cid, start, end, device, gender, age):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:100.0) Gecko/20100101 Firefox/100.0',
@@ -15,10 +17,19 @@ def getgenderrate(cid, start, end, device, gender, age):
         'gender': gender,
         'device': device,
     }
-
-    response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryGenderRate.naver', headers=headers, data=data)
-    response_json = json.loads(response.text)
-    data =  response_json['result'][0]['data']
+    ## setting tor
+    proxies = {
+        'http': 'socks5://localhost:9050',
+    }
+    try:
+        response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryGenderRate.naver', headers=headers, data=data, proxies=proxies)
+    except requests.ConnectionError as ex:
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        response_json = json.loads(response.text)
+        data =  response_json['result'][0]['data']
 
     return data
 

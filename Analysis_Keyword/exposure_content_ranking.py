@@ -5,12 +5,16 @@ import json
 import detail_cafeinfo
 import detail_bloginfo
 import detail_postinfo
+import tor 
 
 def exposure_content_ranking(keyword):
     total_results = []
     start = 0
+    ## setting tor
+    proxies = {
+        'http': 'socks5://127.0.0.1:9050',
+    }
     while (True):
-
         params = {
             'rev': '44',
             'where': 'view',
@@ -42,55 +46,59 @@ def exposure_content_ranking(keyword):
             'abt': '',
             '_callback': 'viewMoreContents',
         }
+        try:
+            response = requests.get('https://s.search.naver.com/p/review/search.naver', params=params, proxies=proxies)
+        except requests.ConnectionError as ex:
+            tor.renew_tor_ip(9051)
+            print("ex = ", ex)
+            print()
+        else:
+            pure_json = response.text[response.text.index('(') + 1 : response.text.rindex(')')]
+            response_json = json.loads(pure_json)
+            response_json = response_json['html']
+            soup = bs(response_json, "html.parser")
 
-        response = requests.get('https://s.search.naver.com/p/review/search.naver', params=params)
-        
-        pure_json = response.text[response.text.index('(') + 1 : response.text.rindex(')')]
-        response_json = json.loads(pure_json)
-        response_json = response_json['html']
-        soup = bs(response_json, "html.parser")
+            results = soup.find_all("div", class_="total_area")
+            #sub_txt sub_name 
 
-        results = soup.find_all("div", class_="total_area")
-        #sub_txt sub_name 
+            for idx, result in enumerate(results):
+                title = result.find('a', class_='api_txt_lines')
+                publish_title = result.find('a', class_='sub_txt sub_name')
 
-        for idx, result in enumerate(results):
-            title = result.find('a', class_='api_txt_lines')
-            publish_title = result.find('a', class_='sub_txt sub_name')
+                ## adc일 경우
+                if publish_title is None:
+                    publish_title = result.find('span', class_='source_txt name')
+                
+                readCount = ""
+                writeDate = ""
 
-            ## adc일 경우
-            if publish_title is None:
-                publish_title = result.find('span', class_='source_txt name')
+                if  "cafe" in str( (requests.get(title.get('href'))).url ):
+                    publication_medium = "cafe"
+                    readCount, writeDate = detail_cafeinfo.getcafeinfo(title.get('href'))
+                elif  "blog" in str( (requests.get(title.get('href'))).url ):
+                    publication_medium = "blog"
+                    readCount = None
+                    writeDate = result.find("span", class_="sub_time sub_txt").text
+                elif  "post" in str( (requests.get(title.get('href'))).url ):
+                    publication_medium = "post"
+                    readCount = None
+                    writeDate = detail_postinfo.getpostinfo(title.get('href'))
+                
+                print("start point : ",start ,"index : ",idx,  "readCount : ", readCount, "writeDate : ", writeDate , "result : ",  title.text, "publish_title : ", publish_title.text)
+
+                title = title.text
+                publish_title = publish_title.text
+                
+                readCnt = readCount
+                writeDate = writeDate
+                total_result = [title, publish_title, publication_medium ,readCnt, writeDate]
+                total_results.append(total_result)
+
+            if len(results)==0:
+                break
+                
             
-            readCount = ""
-            writeDate = ""
-
-            if  "cafe" in str( (requests.get(title.get('href'))).url ):
-                publication_medium = "cafe"
-                readCount, writeDate = detail_cafeinfo.getcafeinfo(title.get('href'))
-            elif  "blog" in str( (requests.get(title.get('href'))).url ):
-                publication_medium = "blog"
-                readCount = None
-                writeDate = result.find("span", class_="sub_time sub_txt").text
-            elif  "post" in str( (requests.get(title.get('href'))).url ):
-                publication_medium = "post"
-                readCount = None
-                writeDate = detail_postinfo.getpostinfo(title.get('href'))
-            
-            #print("start point : ",start ,"index : ",idx,  "readCount : ", readCount, "writeDate : ", writeDate , "result : ",  title.text, "publish_title : ", publish_title.text)
-
-            title = title.text
-            publish_title = publish_title.text
-            
-            readCnt = readCount
-            writeDate = writeDate
-            total_result = [title, publish_title, publication_medium ,readCnt, writeDate]
-            total_results.append(total_result)
-
-        if len(results)==0:
-            break
-            
-        
-        start = start+len(results)+1
+            start = start+len(results)+1
 
 
     return total_results

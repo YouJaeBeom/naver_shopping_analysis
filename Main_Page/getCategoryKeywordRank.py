@@ -22,12 +22,21 @@ def getkeywordrand(cid, start, end, device, gender, age):
             'page': str(page),
             'count': '50',
         }
-
-        response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryKeywordRank.naver', headers=headers, data=data)
-        response_json = json.loads(response.text)
-        ranks =  response_json['ranks']
-        for rank in ranks:
-            ranks_list.append(rank)
+        ## setting tor
+        proxies = {
+            'http': 'socks5://localhost:9050',
+        }
+        try:
+            response = requests.post('https://datalab.naver.com/shoppingInsight/getCategoryKeywordRank.naver', headers=headers, data=data, proxies=proxies)
+        except requests.ConnectionError as ex:
+            tor.renew_tor_ip(9051)
+            print("ex = ", ex)
+            print()
+        else:
+            response_json = json.loads(response.text)
+            ranks =  response_json['ranks']
+            for rank in ranks:
+                ranks_list.append(rank)
 
     return ranks_list
 
