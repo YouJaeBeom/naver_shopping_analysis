@@ -1,7 +1,7 @@
 import requests
 import json
 import datetime
-
+import tor 
 def total_blogCnt(keyword):
     headers = {
         'Referer': 'https://section.blog.naver.com/Search/Post.naver?pageNo=1&rangeType=ALL&orderBy=sim&keyword='+keyword.encode('utf-8').decode('iso-8859-1'),
@@ -17,14 +17,24 @@ def total_blogCnt(keyword):
         'type': 'post',
     }
 
-    response = requests.get('https://section.blog.naver.com/ajax/SearchList.naver', params=params, headers=headers)
-    try : 
-        response_json = json.loads(response.text)
-    except:
-        response_json = json.loads(response.text.replace(")]}',",""))
-    total_blogCnt = response_json['result']['totalCount']
+    ## setting tor
+    proxies = {
+        'http': 'socks5://127.0.0.1:9050',
+    }
+    try:
+        response = requests.get('https://section.blog.naver.com/ajax/SearchList.naver', params=params, headers=headers, proxies=proxies)
+    except requests.ConnectionError as ex:
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        try : 
+            response_json = json.loads(response.text)
+        except:
+            response_json = json.loads(response.text.replace(")]}',",""))
+        total_blogCnt = response_json['result']['totalCount']
     
-    return  total_blogCnt
+        return  total_blogCnt
 
 def monthly_blogCnt(keyword):
     now = datetime.datetime.now()
@@ -47,15 +57,25 @@ def monthly_blogCnt(keyword):
         'startDate': start,
         'type': 'post',
     }
-
-    response = requests.get('https://section.blog.naver.com/ajax/SearchList.naver', params=params, headers=headers)
-    try : 
-        response_json = json.loads(response.text)
-    except:
-        response_json = json.loads(response.text.replace(")]}',",""))
-    monthly_blogCnt = response_json['result']['totalCount']
+    ## setting tor
+    proxies = {
+        'http': 'socks5://127.0.0.1:9050',
+    }
     
-    return  monthly_blogCnt
+    try:
+        response = requests.get('https://section.blog.naver.com/ajax/SearchList.naver', params=params, headers=headers,proxies=proxies)
+    except requests.ConnectionError as ex:
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        try : 
+            response_json = json.loads(response.text)
+        except:
+            response_json = json.loads(response.text.replace(")]}',",""))
+        monthly_blogCnt = response_json['result']['totalCount']
+        
+        return  monthly_blogCnt
 
 if __name__ == "__main__" :
     keyword = "나이키"

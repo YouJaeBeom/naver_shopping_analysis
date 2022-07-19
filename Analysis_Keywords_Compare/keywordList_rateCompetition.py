@@ -3,7 +3,7 @@ import requests
 import json
 import authorization
 import volumeProducts
-import volumeSearch
+import volumeSearch_M
 
 if __name__ == "__main__" :
     keyword_list = ["마스크","나이키"]
@@ -12,7 +12,7 @@ if __name__ == "__main__" :
         total_count= volumeProducts.products_count(keyword)
         print(total_count)
 
-        monthlyPcQcCnt, monthlyMobileQcCnt = volumeSearch.search_volume(keyword)
+        monthlyPcQcCnt, monthlyMobileQcCnt = volumeSearch_M.search_volume(keyword)
         print(monthlyPcQcCnt, monthlyMobileQcCnt)
 
         comp = total_count / (monthlyPcQcCnt+monthlyMobileQcCnt)
