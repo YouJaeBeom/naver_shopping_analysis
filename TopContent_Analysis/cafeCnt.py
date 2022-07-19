@@ -1,7 +1,7 @@
 import requests
 import json
 import datetime
-
+import tor
 def total_cafeCnt(keyword):
     now = datetime.datetime.now()
     end = now.strftime('%Y%m%d')
@@ -20,16 +20,24 @@ def total_cafeCnt(keyword):
             end,
         ],
     }
-
-    response = requests.post('https://apis.naver.com/cafe-home-web/cafe-home/v1/search/articles',  headers=headers, json=json_data)
-
-    try : 
-        response_json = json.loads(response.text)
-    except:
-        response_json = json.loads(response.text.replace(")]}',",""))
-    total_cafeCnt = response_json['message']['result']['totalCount']
-    
-    return  total_cafeCnt
+    ## setting tor
+    proxies = {
+        'http': 'socks5://127.0.0.1:9050',
+    }
+    try:
+        response = requests.post('https://apis.naver.com/cafe-home-web/cafe-home/v1/search/articles',  headers=headers, json=json_data, proxies=proxies)
+    except requests.ConnectionError as ex:
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        try : 
+            response_json = json.loads(response.text)
+        except:
+            response_json = json.loads(response.text.replace(")]}',",""))
+        total_cafeCnt = response_json['message']['result']['totalCount']
+        
+        return  total_cafeCnt
 
 def monthly_cafeCnt(keyword):
     now = datetime.datetime.now()
@@ -54,16 +62,24 @@ def monthly_cafeCnt(keyword):
             end,
         ],
     }
-
-    response = requests.post('https://apis.naver.com/cafe-home-web/cafe-home/v1/search/articles', headers=headers, json=json_data)
-
-    try : 
-        response_json = json.loads(response.text)
-    except:
-        response_json = json.loads(response.text.replace(")]}',",""))
-    monthly_blogCnt = response_json['message']['result']['totalCount']
-    
-    return  monthly_blogCnt
+    ## setting tor
+    proxies = {
+        'http': 'socks5://127.0.0.1:9050',
+    }
+    try:
+        response = requests.post('https://apis.naver.com/cafe-home-web/cafe-home/v1/search/articles', headers=headers, json=json_data, proxies=proxies)
+    except requests.ConnectionError as ex:
+        tor.renew_tor_ip(9051)
+        print("ex = ", ex)
+        print()
+    else:
+        try : 
+            response_json = json.loads(response.text)
+        except:
+            response_json = json.loads(response.text.replace(")]}',",""))
+        monthly_blogCnt = response_json['message']['result']['totalCount']
+        
+        return  monthly_blogCnt
 
 if __name__ == "__main__" :
     keyword = "나이키"
