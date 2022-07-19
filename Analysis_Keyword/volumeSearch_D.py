@@ -23,7 +23,6 @@ def search_volume(cid, start, end, device, gender, age, keyword):
     proxies = {
         'http': 'socks5://127.0.0.1:9050',
     }
-
     try:
         response = requests.post('https://datalab.naver.com/shoppingInsight/getKeywordClickTrend.naver', headers=headers, proxies=proxies, data=data)
     except requests.ConnectionError as ex:
@@ -32,9 +31,9 @@ def search_volume(cid, start, end, device, gender, age, keyword):
         print()
     else:
         response_json = json.loads(response.text)
-        data =  response_json['result'][0]['data']
+        search_volume =  response_json['result'][0]['data']
 
-        return data
+        return search_volume
 
 if __name__ == "__main__":
     ## 기간 설정

@@ -3,7 +3,7 @@ import requests
 import datetime
 import time
 def getkeywordrand(cid, start, end, device, gender, age):
-    ranks_list = []
+    keywordrank = []
     for page in range(1,26):
         time.sleep(0.1)
         headers = {
@@ -36,9 +36,9 @@ def getkeywordrand(cid, start, end, device, gender, age):
             response_json = json.loads(response.text)
             ranks =  response_json['ranks']
             for rank in ranks:
-                ranks_list.append(rank)
+                keywordrank.append(rank)
 
-    return ranks_list
+    return keywordrank
 
 if __name__ == "__main__":
     ## 기간 설정
@@ -58,5 +58,5 @@ if __name__ == "__main__":
     ## 나이별 "10,20,30,40,50,60"
     age = "20,30,40"
 
-    ranks_list = getkeywordrand(cid, start, end, device, gender, age)
-    print("ranks_list : ", ranks_list)
+    keywordrank = getkeywordrand(cid, start, end, device, gender, age)
+    print("keywordrank : ", keywordrank)

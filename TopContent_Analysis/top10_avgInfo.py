@@ -31,7 +31,7 @@ def top10_avg_info(keyword):
     else:
         response_json = json.loads(response.text)
         data_list =  response_json['shoppingResult']['products'][:10]
-
+        avg_results = []
         for data in data_list:
             rank = data['rank']
             
@@ -46,6 +46,9 @@ def top10_avg_info(keyword):
                 store_keepCnt, qnaCnt = None, None
             
             print("rank : ",rank, reviewCount, keepCnt, score, store_keepCnt, qnaCnt)
+            result = [rank, reviewCount, keepCnt, score, store_keepCnt, qnaCnt]
+            avg_results.append(result)
+        return avg_results
 
 if __name__ == "__main__":
-    top10_avg_info("애플워치")
+    avg_results = top10_avg_info("애플워치")

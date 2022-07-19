@@ -32,7 +32,7 @@ def getdevicerate(cid, start, end, device, gender, age):
         response_json = json.loads(response.text)
         data =  response_json['result'][0]['data']
     
-    return data
+    return devicerate
 
 if __name__ == "__main__":
     ## 기간 설정
@@ -53,5 +53,5 @@ if __name__ == "__main__":
     ## 나이별 "10,20,30,40,50,60"
     age = "20,30,40"
 
-    agerate = getdevicerate(cid, start, end, device, gender, age)
-    print("getdevicerate :", (agerate))
+    devicerate = getdevicerate(cid, start, end, device, gender, age)
+    print("getdevicerate :", (devicerate))

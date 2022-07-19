@@ -32,7 +32,7 @@ def getagerate(cid, start, end, device, gender, age):
         response_json = json.loads(response.text)
         data =  response_json['result'][0]['data']
 
-        return data
+        return agerate
 
 
 if __name__ == "__main__":

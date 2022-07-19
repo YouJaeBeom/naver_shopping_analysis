@@ -62,14 +62,14 @@ def tap_exposure_orderList(keyword):
             ]
         results = soup.find_all(["div","section"],class_=tap_list)
 
-        order_list = []
+        tap_order_list = []
         for idx, result in enumerate(results):
             for indx, tap in enumerate(tap_list):
                 if str(tap) in str(result):
-                    order_list.append(tap_list_str[indx])
+                    tap_order_list.append(tap_list_str[indx])
                     print(tap_list_str[indx])
-    return order_list
+    return tap_order_list
 
 if __name__== "__main__":
-    order_list = tap_exposure_orderList("롤")
-    print("order_list :",order_list)
+    tap_order_list = tap_exposure_orderList("롤")
+    print("order_list :",tap_order_list)

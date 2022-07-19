@@ -4,7 +4,7 @@ import time
 import tor 
 def top_related_keywords(cid,start,end):
 
-    top_related_keywords_list = []
+    tap_related_keywords_list = []
     ## setting tor
     proxies = {
         'http': 'socks5://localhost:9050',
@@ -39,9 +39,9 @@ def top_related_keywords(cid,start,end):
             ranks = response_json['ranks']
             
             for rank in ranks: 
-                top_related_keywords_list.append(rank)
+                tap_related_keywords_list.append(rank)
     
-    return top_related_keywords_list
+    return tap_related_keywords_list
 
 if __name__ == "__main__" :
     cid = "50000006"

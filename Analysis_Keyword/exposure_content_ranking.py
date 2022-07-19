@@ -8,7 +8,7 @@ import detail_postinfo
 import tor 
 
 def exposure_content_ranking(keyword):
-    total_results = []
+    ranking_results = []
     start = 0
     ## setting tor
     proxies = {
@@ -91,8 +91,8 @@ def exposure_content_ranking(keyword):
                 
                 readCnt = readCount
                 writeDate = writeDate
-                total_result = [title, publish_title, publication_medium ,readCnt, writeDate]
-                total_results.append(total_result)
+                ranking_result = [keyword, title, publish_title, publication_medium ,readCnt, writeDate]
+                ranking_results.append(total_result)
 
             if len(results)==0:
                 break
@@ -101,12 +101,12 @@ def exposure_content_ranking(keyword):
             start = start+len(results)+1
 
 
-    return total_results
+    return ranking_results
     
     
 
 if __name__ == "__main__":
     keyword = "아디다스"
-    results = exposure_content_ranking(keyword)
-    print(results)
+    ranking_results = exposure_content_ranking(keyword)
+    print(ranking_results)
     #cafeid()
